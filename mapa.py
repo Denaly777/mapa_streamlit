@@ -32,7 +32,7 @@ authenticator = stauth.Authenticate(
 # ⬆️ FIN DEL CAMBIO ⬆️
 
 # 2. Pantalla de Login
-name, authentication_status, username = authenticator.login('Login', 'main')
+name, authentication_status, username = authenticator.login('main')
 
 if authentication_status is False:
     st.error('Username/password is incorrect')

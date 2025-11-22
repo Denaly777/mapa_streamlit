@@ -5,3 +5,4 @@ streamlit-folium
 branca
 pyyaml 
 streamlit-authenticator
+bcrypt

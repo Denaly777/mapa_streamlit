@@ -6,7 +6,7 @@ from streamlit_folium import st_folium
 
 # 1. Configuración de la página
 st.set_page_config(layout="wide")
-st.title("📍 Barrios de Madrid (Polígonos)")
+st.title("Barrios de Madrid (Polígonos)")
 st.markdown("Haz clic en un barrio para ver la información en el panel derecho.")
 
 # --- DATOS DE EJEMPLO (POLÍGONOS) ---

@@ -46,10 +46,26 @@ elif st.session_state["authentication_status"]:
 
     # --- CONFIGURACIÓN DEL MAPA ---
     st.sidebar.header("Configuración del Mapa")
-    tipo_mapa = st.sidebar.selectbox(
+    
+    map_options = {
+        "OpenStreetMap": {"tiles": "OpenStreetMap", "attr": None},
+        "CartoDB Positron (Claro)": {"tiles": "CartoDB positron", "attr": None},
+        "CartoDB Dark Matter (Oscuro)": {"tiles": "CartoDB dark_matter", "attr": None},
+        "Esri Satellite": {
+            "tiles": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+            "attr": "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community"
+        },
+        "Esri Street Map": {
+            "tiles": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",
+            "attr": "Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom, 2012"
+        }
+    }
+
+    selected_map_name = st.sidebar.selectbox(
         "Selecciona el estilo del mapa:",
-        ["OpenStreetMap", "CartoDB positron", "CartoDB dark_matter"]
+        list(map_options.keys())
     )
+    selected_map_config = map_options[selected_map_name]
 
     st.title("Barrios de Madrid con clustering")
     st.markdown("Haz clic en un barrio para ver la información en el panel derecho.")
@@ -266,7 +282,12 @@ elif st.session_state["authentication_status"]:
         centro_mapa = [40.4168, -3.7038]
         zoom = 13
 
-    m = folium.Map(location=centro_mapa, zoom_start=zoom, tiles=tipo_mapa)
+    m = folium.Map(
+        location=centro_mapa, 
+        zoom_start=zoom, 
+        tiles=selected_map_config["tiles"], 
+        attr=selected_map_config["attr"]
+    )
 
     # --- CLUSTERING ---
     # 2. Creamos el grupo de clusters y lo añadimos al mapa

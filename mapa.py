@@ -48,8 +48,16 @@ elif st.session_state["authentication_status"]:
     st.markdown("Haz clic en un barrio para ver la información en el panel derecho.")
 
     # --- CARGA DE DATOS ---
-    st.sidebar.header("Cargar Datos")
-    uploaded_file = st.sidebar.file_uploader("Sube un archivo Excel (.xlsx)", type=["xlsx"])
+    st.write("### Configuración de Datos")
+    # Preguntar al usuario si quiere cargar archivo o usar ejemplo
+    opcion = st.radio("¿Deseas cargar un archivo de datos?", ("Sí, cargar archivo", "No, usar datos de ejemplo"))
+
+    uploaded_file = None
+    if opcion == "Sí, cargar archivo":
+        uploaded_file = st.file_uploader("Sube un archivo Excel (.xlsx)", type=["xlsx"])
+        if uploaded_file is None:
+            st.info("Por favor, sube un archivo para continuar.")
+            st.stop()
 
     if uploaded_file is not None:
         try:
@@ -70,7 +78,7 @@ elif st.session_state["authentication_status"]:
             st.error(f"Error al leer el archivo: {e}")
             st.stop()
     else:
-        st.info("Usando datos de ejemplo. Sube un Excel en la barra lateral para usar tus propios datos.")
+        st.success("Cargando datos de ejemplo...")
         # --- DATOS DE EJEMPLO (POLÍGONOS) ---
         data = {
         'nombre': [

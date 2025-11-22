@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import folium
-from folium.plugins import Draw
+from folium.plugins import Draw, MarkerCluster # <--- 1. Importamos MarkerCluster
 from streamlit_folium import st_folium
 import streamlit_authenticator as stauth
 import yaml
@@ -14,7 +14,6 @@ st.set_page_config(layout="wide")
 # 1. CONFIGURACIÓN Y AUTENTICACIÓN
 # ==============================================================================
 
-# Se recomienda mantener el archivo config.yaml en la raíz del proyecto
 try:
     with open('config.yaml') as file:
         config = yaml.load(file, Loader=SafeLoader)
@@ -22,16 +21,12 @@ except FileNotFoundError:
     st.error("Archivo de configuración 'config.yaml' no encontrado. Asegúrate de crearlo.")
     st.stop()
 
-
-# ⬇️ ESTE ES EL CAMBIO CLAVE ⬇️
-# La nueva sintaxis de stauth.Authenticate solo acepta 'credentials' y 'cookie'
 authenticator = stauth.Authenticate(
     config['credentials'],
     config['cookie']['name'],
     config['cookie']['key'],
     config['cookie']['expiry_days']
 )
-# ⬆️ FIN DEL CAMBIO ⬆️
 
 # 2. Pantalla de Login
 try:
@@ -52,10 +47,8 @@ elif st.session_state["authentication_status"]:
     st.markdown("Haz clic en un barrio para ver la información en el panel derecho.")
 
     # --- DATOS DE EJEMPLO (POLÍGONOS) ---
-    # Coordenadas aproximadas de algunos barrios/zonas
     data = {
         'nombre': ['Sol', 'Malasaña', 'Retiro'],
-        # Cada 'coords' es una lista de [lat, lon] que define el polígono
         'coords': [
             [ # Sol (aproximado)
             [40.43741, -3.638878], [40.432445, -3.649006], [40.431792, -3.660336], [40.423559, -3.63905], [40.423951, -3.63184], [40.425258, -3.629093], [40.43741, -3.638878]
@@ -75,9 +68,9 @@ elif st.session_state["authentication_status"]:
             'El pulmón verde del centro de Madrid, ideal para pasear y relajarse.'
         ],
         'imagen_url': [
-            'https://i.ibb.co/6P6XyRk/gran-via.jpg', # Placeholder
-            'https://i.ibb.co/5cQ3N6s/plaza-espana.jpg', # Placeholder
-            'https://i.ibb.co/3sS7L7W/sevilla-catedral.jpg' # Placeholder
+            'https://i.ibb.co/6P6XyRk/gran-via.jpg', 
+            'https://i.ibb.co/5cQ3N6s/plaza-espana.jpg', 
+            'https://i.ibb.co/3sS7L7W/sevilla-catedral.jpg' 
         ]
     }
 
@@ -96,9 +89,7 @@ elif st.session_state["authentication_status"]:
         df_display = df
 
     # --- CREACIÓN DEL MAPA FOLIUM ---
-    # Calculamos el centro aproximado
     if not df_display.empty:
-        # Tomamos el primer punto del primer polígono para centrar
         primer_poligono = df_display.iloc[0]['coords']
         centro_mapa = primer_poligono[0]
         zoom = 14 if seleccion != 'Todos' else 13
@@ -108,8 +99,13 @@ elif st.session_state["authentication_status"]:
 
     m = folium.Map(location=centro_mapa, zoom_start=zoom)
 
+    # --- CLUSTERING ---
+    # 2. Creamos el grupo de clusters y lo añadimos al mapa
+    marker_cluster = MarkerCluster().add_to(m)
+
     # 4. Añadir los polígonos existentes
     for index, row in df_display.iterrows():
+        # 3. Añadimos los polígonos al 'marker_cluster' en lugar de a 'm'
         folium.Polygon(
             locations=row['coords'],
             color="blue",
@@ -117,7 +113,7 @@ elif st.session_state["authentication_status"]:
             fill=True,
             fill_opacity=0.4,
             tooltip=row['nombre']
-        ).add_to(m)
+        ).add_to(marker_cluster) 
 
     # --- HERRAMIENTA DE DIBUJO ---
     draw = Draw(
@@ -133,13 +129,11 @@ elif st.session_state["authentication_status"]:
     col_map, col_info = st.columns([3, 1])
 
     with col_map:
-        # Se añade return_on_hover=False para evitar recargas excesivas
         map_output = st_folium(m, width=None, height=500)
 
     with col_info:
         st.header("Detalles del Barrio")
         
-        # Verificar si se ha dibujado algo nuevo
         if map_output and map_output.get("all_drawings"):
             st.subheader("Nuevo Elemento Dibujado")
             drawings = map_output["all_drawings"]
@@ -150,7 +144,6 @@ elif st.session_state["authentication_status"]:
                 st.write(f"Tipo: {geometry_type}")
                 st.write(f"Coordenadas: {coords}")
         
-        # Verificar si se ha hecho clic en algún objeto existente
         elif map_output and map_output.get("last_object_clicked_tooltip"):
             clicked_tooltip = map_output.get("last_object_clicked_tooltip")
             

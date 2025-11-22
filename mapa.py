@@ -6,7 +6,6 @@ from streamlit_folium import st_folium
 import streamlit_authenticator as stauth
 import yaml
 from yaml.loader import SafeLoader
-import random
 
 # 1. Configuración de la página
 st.set_page_config(layout="wide")
@@ -48,45 +47,77 @@ elif st.session_state["authentication_status"]:
     st.markdown("Haz clic en un barrio para ver la información en el panel derecho.")
 
     # --- DATOS DE EJEMPLO (POLÍGONOS) ---
-    # Generar 10 ubicaciones aleatorias en España
-    nombres = []
-    coords_list = []
-    descripciones = []
-    imagenes_urls = []
-    
-    # Lista de imágenes de ejemplo para asignar aleatoriamente
-    ejemplos_img = [
-        'https://i.ibb.co/6P6XyRk/gran-via.jpg', 
-        'https://i.ibb.co/5cQ3N6s/plaza-espana.jpg', 
-        'https://i.ibb.co/3sS7L7W/sevilla-catedral.jpg' 
-    ]
-
-    for i in range(10):
-        nombres.append(f"Lugar Aleatorio {i+1}")
-        
-        # Coordenadas aproximadas de España (Latitud: 36 a 43.5, Longitud: -9 a 3)
-        lat = random.uniform(36.0, 43.5)
-        lon = random.uniform(-9.0, 3.0)
-        
-        # Crear un polígono pequeño (cuadrado) alrededor del punto aleatorio
-        offset = 0.05  # Tamaño del polígono
-        poligono = [
-            [lat + offset, lon - offset],
-            [lat + offset, lon + offset],
-            [lat - offset, lon + offset],
-            [lat - offset, lon - offset],
-            [lat + offset, lon - offset] # Cerrar el polígono
-        ]
-        coords_list.append(poligono)
-        
-        descripciones.append(f"Esta es una descripción generada automáticamente para el Lugar {i+1} situado en España.")
-        imagenes_urls.append(random.choice(ejemplos_img))
-
     data = {
-        'nombre': nombres,
-        'coords': coords_list,
-        'descripcion': descripciones,
-        'imagen_url': imagenes_urls
+        'nombre': [
+            'Sol', 'Malasaña', 'Retiro', 
+            'La Latina', 'Chueca', 'Barrio de Salamanca', 
+            'Lavapiés', 'Chamberí', 'Moncloa', 'Madrid Río'
+        ],
+        'coords': [
+            [ # Sol (aproximado)
+            [40.43741, -3.638878], [40.432445, -3.649006], [40.431792, -3.660336], [40.423559, -3.63905], [40.423951, -3.63184], [40.425258, -3.629093], [40.43741, -3.638878]
+            ],
+            [ # Malasaña (Universidad) (aproximado)
+                [40.4260, -3.7080], [40.4280, -3.7020], 
+                [40.4230, -3.7010], [40.4210, -3.7060], [40.4260, -3.7080]
+            ],
+            [ # Parque del Retiro (aproximado)
+                [40.4200, -3.6800], [40.4200, -3.6900], 
+                [40.4080, -3.6900], [40.4080, -3.6800], [40.4200, -3.6800]
+            ],
+            [ # La Latina (aproximado)
+                [40.4140, -3.7120], [40.4140, -3.7060],
+                [40.4080, -3.7060], [40.4080, -3.7120], [40.4140, -3.7120]
+            ],
+            [ # Chueca (aproximado)
+                [40.4250, -3.7000], [40.4250, -3.6940],
+                [40.4200, -3.6940], [40.4200, -3.7000], [40.4250, -3.7000]
+            ],
+            [ # Barrio de Salamanca (aproximado)
+                [40.4350, -3.6900], [40.4350, -3.6700],
+                [40.4250, -3.6700], [40.4250, -3.6900], [40.4350, -3.6900]
+            ],
+            [ # Lavapiés (aproximado)
+                [40.4120, -3.7040], [40.4120, -3.6980],
+                [40.4060, -3.6980], [40.4060, -3.7040], [40.4120, -3.7040]
+            ],
+            [ # Chamberí (aproximado)
+                [40.4400, -3.7100], [40.4400, -3.6900],
+                [40.4300, -3.6900], [40.4300, -3.7100], [40.4400, -3.7100]
+            ],
+            [ # Moncloa (aproximado)
+                [40.4400, -3.7250], [40.4400, -3.7120],
+                [40.4300, -3.7120], [40.4300, -3.7250], [40.4400, -3.7250]
+            ],
+            [ # Madrid Río (aproximado)
+                [40.4000, -3.7200], [40.4000, -3.6900],
+                [40.3900, -3.6900], [40.3900, -3.7200], [40.4000, -3.7200]
+            ]
+        ],
+        'descripcion': [
+            'El corazón turístico y comercial de Madrid, donde se encuentra el Km 0.',
+            'Barrio bohemio y moderno, famoso por su vida nocturna y cultura pop.',
+            'El pulmón verde del centro de Madrid, ideal para pasear y relajarse.',
+            'Barrio castizo por excelencia, famoso por el Rastro y sus tapas.',
+            'Conocido por su ambiente LGTBI+, tiendas de moda y animada vida nocturna.',
+            'Una de las zonas más exclusivas, con la Milla de Oro y edificios señoriales.',
+            'Barrio multicultural y bohemio, lleno de arte urbano y gastronomía internacional.',
+            'Zona residencial tradicional con arquitectura aristocrática y la plaza de Olavide.',
+            'Ambiente universitario, cerca de la Ciudad Universitaria y el Faro de Moncloa.',
+            'Gran parque lineal a lo largo del Manzanares, ideal para deporte y ocio familiar.'
+        ],
+        'imagen_url': [
+            'https://i.ibb.co/6P6XyRk/gran-via.jpg', 
+            'https://i.ibb.co/5cQ3N6s/plaza-espana.jpg', 
+            'https://i.ibb.co/3sS7L7W/sevilla-catedral.jpg',
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Madrid_-_La_Latina_-_Plaza_de_la_Cebada.jpg/640px-Madrid_-_La_Latina_-_Plaza_de_la_Cebada.jpg',
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Plaza_de_Chueca_%28Madrid%29_01.jpg/640px-Plaza_de_Chueca_%28Madrid%29_01.jpg',
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Calle_de_Serrano_%28Madrid%29_01.jpg/640px-Calle_de_Serrano_%28Madrid%29_01.jpg',
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Calle_de_Argumosa_%28Madrid%29_02.jpg/640px-Calle_de_Argumosa_%28Madrid%29_02.jpg',
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Plaza_de_Olavide_%28Madrid%29_03.jpg/640px-Plaza_de_Olavide_%28Madrid%29_03.jpg',
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Faro_de_Moncloa_%28Madrid%29_04.jpg/640px-Faro_de_Moncloa_%28Madrid%29_04.jpg',
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Madrid_R%C3%ADo_-_Puente_de_Arganzuela.jpg/640px-Madrid_R%C3%ADo_-_Puente_de_Arganzuela.jpg'
+        ]
     }
 
     df = pd.DataFrame(data)

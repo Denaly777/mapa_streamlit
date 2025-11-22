@@ -26,8 +26,10 @@ except FileNotFoundError:
 # ⬇️ ESTE ES EL CAMBIO CLAVE ⬇️
 # La nueva sintaxis de stauth.Authenticate solo acepta 'credentials' y 'cookie'
 authenticator = stauth.Authenticate(
-    config['credentials'], # Primer parámetro: credenciales
-    config['cookie']      # Segundo parámetro: configuración de cookies
+    config['credentials'],
+    config['cookie']['name'],
+    config['cookie']['key'],
+    config['cookie']['expiry_days']
 )
 # ⬆️ FIN DEL CAMBIO ⬆️
 

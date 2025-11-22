@@ -47,7 +47,7 @@ elif st.session_state["authentication_status"]:
     st.markdown("Haz clic en un barrio para ver la información en el panel derecho.")
 
     # --- DATOS DE EJEMPLO (POLÍGONOS) ---
-data = {
+    data = {
     'nombre': [
         'Sol', 'Malasaña', 'Retiro', 
         'La Latina', 'Chueca', 'Barrio de Salamanca', 

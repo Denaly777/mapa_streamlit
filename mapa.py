@@ -265,9 +265,11 @@ elif st.session_state["authentication_status"]:
     # 2. Creamos el grupo de clusters y lo añadimos al mapa
     # disableClusteringAtZoom=14: A partir de zoom 14, los marcadores se muestran individualmente
     # spiderfyOnMaxZoom=True: Si hay marcadores en el mismo punto, se separan en espiral
+    # showCoverageOnHover=False: Evita que se muestre el polígono de cobertura al pasar el ratón
     marker_cluster = MarkerCluster(
         disableClusteringAtZoom=14, 
-        spiderfyOnMaxZoom=True
+        spiderfyOnMaxZoom=True,
+        showCoverageOnHover=False
     ).add_to(m)
 
     # 4. Añadir los polígonos existentes

@@ -34,16 +34,19 @@ authenticator = stauth.Authenticate(
 # ⬆️ FIN DEL CAMBIO ⬆️
 
 # 2. Pantalla de Login
-name, authentication_status, username = authenticator.login('main')
+try:
+    authenticator.login('main')
+except Exception as e:
+    st.error(e)
 
-if authentication_status is False:
+if st.session_state["authentication_status"] is False:
     st.error('Username/password is incorrect')
-elif authentication_status is None:
+elif st.session_state["authentication_status"] is None:
     st.warning('Please enter your username and password')
-elif authentication_status:
+elif st.session_state["authentication_status"]:
     # --- APLICACIÓN PRINCIPAL ---
     authenticator.logout('Logout', 'sidebar')
-    st.sidebar.write(f'Welcome *{name}*')
+    st.sidebar.write(f'Welcome *{st.session_state["name"]}*')
 
     st.title("Barrios de Madrid (Polígonos)")
     st.markdown("Haz clic en un barrio para ver la información en el panel derecho.")

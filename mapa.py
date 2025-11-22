@@ -105,7 +105,21 @@ elif st.session_state["authentication_status"]:
 
     # 4. Añadir los polígonos existentes
     for index, row in df_display.iterrows():
-        # 3. Añadimos los polígonos al 'marker_cluster' en lugar de a 'm'
+        # Calcular centroide para el marcador
+        points = row['coords']
+        if points:
+            lat_c = sum(p[0] for p in points) / len(points)
+            lon_c = sum(p[1] for p in points) / len(points)
+            centroid = [lat_c, lon_c]
+            
+            # 3. Añadimos un marcador al cluster (para que funcione el clustering)
+            folium.Marker(
+                location=centroid,
+                tooltip=row['nombre'],
+                icon=folium.Icon(color='blue', icon='info-sign')
+            ).add_to(marker_cluster)
+
+        # Añadimos el polígono al mapa (para ver el área)
         folium.Polygon(
             locations=row['coords'],
             color="blue",
@@ -113,7 +127,7 @@ elif st.session_state["authentication_status"]:
             fill=True,
             fill_opacity=0.4,
             tooltip=row['nombre']
-        ).add_to(marker_cluster) 
+        ).add_to(m) 
 
     # --- HERRAMIENTA DE DIBUJO ---
     draw = Draw(

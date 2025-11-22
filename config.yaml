@@ -1,0 +1,10 @@
+credentials:
+  usernames:
+    admin:
+      email: admin@gmail.com
+      name: Admin User
+      password: $2b$12$hz7UrHNdLVZCGp71ww/QUu1nfMBdJ/YPFHECjcZd9JUR1rq9v0J9W # Password: admin
+cookie:
+  expiry_days: 30
+  key: random_signature_key
+  name: random_cookie_name

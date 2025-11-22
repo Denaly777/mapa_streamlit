@@ -218,10 +218,10 @@ elif st.session_state["authentication_status"]:
     if not df_display.empty:
         primer_poligono = df_display.iloc[0]['coords']
         centro_mapa = primer_poligono[0]
-        zoom = 14 if seleccion != 'Todos' else 13
+        zoom = 5 if seleccion != 'Todos' else 13
     else:
         centro_mapa = [40.4168, -3.7038]
-        zoom = 13
+        zoom = 5
 
     m = folium.Map(location=centro_mapa, zoom_start=zoom)
 

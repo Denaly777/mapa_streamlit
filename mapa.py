@@ -44,6 +44,13 @@ elif st.session_state["authentication_status"]:
     authenticator.logout('Logout', 'sidebar')
     st.sidebar.write(f'Welcome *{st.session_state["name"]}*')
 
+    # --- CONFIGURACIÓN DEL MAPA ---
+    st.sidebar.header("Configuración del Mapa")
+    tipo_mapa = st.sidebar.selectbox(
+        "Selecciona el estilo del mapa:",
+        ["OpenStreetMap", "CartoDB positron", "CartoDB dark_matter"]
+    )
+
     st.title("Barrios de Madrid con clustering")
     st.markdown("Haz clic en un barrio para ver la información en el panel derecho.")
 
@@ -259,7 +266,7 @@ elif st.session_state["authentication_status"]:
         centro_mapa = [40.4168, -3.7038]
         zoom = 13
 
-    m = folium.Map(location=centro_mapa, zoom_start=zoom)
+    m = folium.Map(location=centro_mapa, zoom_start=zoom, tiles=tipo_mapa)
 
     # --- CLUSTERING ---
     # 2. Creamos el grupo de clusters y lo añadimos al mapa

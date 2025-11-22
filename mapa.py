@@ -215,13 +215,16 @@ elif st.session_state["authentication_status"]:
         df_display = df
 
     # --- CREACIÓN DEL MAPA FOLIUM ---
-    if not df_display.empty:
+    if seleccion == 'Todos':
+        centro_mapa = [40.4637, -3.7492] # Centro aproximado de España
+        zoom = 6 # Zoom alejado para ver todo el país
+    elif not df_display.empty:
         primer_poligono = df_display.iloc[0]['coords']
         centro_mapa = primer_poligono[0]
-        zoom = 5 if seleccion != 'Todos' else 13
+        zoom = 14
     else:
         centro_mapa = [40.4168, -3.7038]
-        zoom = 5
+        zoom = 13
 
     m = folium.Map(location=centro_mapa, zoom_start=zoom)
 

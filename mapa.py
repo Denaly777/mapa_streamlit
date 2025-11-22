@@ -53,7 +53,7 @@ elif st.session_state["authentication_status"]:
         "CartoDB Dark Matter (Oscuro)": {"tiles": "CartoDB dark_matter", "attr": None},
         "Esri Satellite": {
             "tiles": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-           
+            "attr": "Tiles &copy; "
         },
         "Esri Street Map": {
             "tiles": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",

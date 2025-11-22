@@ -263,7 +263,12 @@ elif st.session_state["authentication_status"]:
 
     # --- CLUSTERING ---
     # 2. Creamos el grupo de clusters y lo añadimos al mapa
-    marker_cluster = MarkerCluster().add_to(m)
+    # disableClusteringAtZoom=14: A partir de zoom 14, los marcadores se muestran individualmente
+    # spiderfyOnMaxZoom=True: Si hay marcadores en el mismo punto, se separan en espiral
+    marker_cluster = MarkerCluster(
+        disableClusteringAtZoom=14, 
+        spiderfyOnMaxZoom=True
+    ).add_to(m)
 
     # 4. Añadir los polígonos existentes
     for index, row in df_display.iterrows():

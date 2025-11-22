@@ -43,7 +43,7 @@ elif st.session_state["authentication_status"]:
     authenticator.logout('Logout', 'sidebar')
     st.sidebar.write(f'Welcome *{st.session_state["name"]}*')
 
-    st.title("Barrios de Madrid (Polígonos)")
+    st.title("Barrios de Madrid con clustering")
     st.markdown("Haz clic en un barrio para ver la información en el panel derecho.")
 
     # --- DATOS DE EJEMPLO (POLÍGONOS) ---

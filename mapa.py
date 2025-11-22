@@ -42,9 +42,11 @@ data = {
 df = pd.DataFrame(data)
 
 # --- BUSCADOR ---
-st.subheader("Buscador")
-opciones = ['Todos'] + sorted(df['nombre'].unique().tolist())
-seleccion = st.selectbox("Selecciona un barrio:", opciones)
+col_search, _ = st.columns([1, 3])
+with col_search:
+    st.subheader("Buscador")
+    opciones = ['Todos'] + sorted(df['nombre'].unique().tolist())
+    seleccion = st.selectbox("Selecciona un barrio:", opciones)
 
 if seleccion != 'Todos':
     df_display = df[df['nombre'] == seleccion]

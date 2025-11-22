@@ -6,6 +6,7 @@ from streamlit_folium import st_folium
 import streamlit_authenticator as stauth
 import yaml
 from yaml.loader import SafeLoader
+import ast
 
 # 1. Configuración de la página
 st.set_page_config(layout="wide")

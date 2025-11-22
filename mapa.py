@@ -10,40 +10,28 @@ from yaml.loader import SafeLoader
 # 1. Configuración de la página
 st.set_page_config(layout="wide")
 
-# --- AUTENTICACIÓN ---
-# Configuración de usuarios (En producción, usar un archivo config.yaml y hashes seguros)
-config_data = {
-    'credentials': {
-        'usernames': {
-            'admin': {
-                'name': 'Admin User',
-                'password': 'abc', # En producción usar hash generado con Hasher(['abc']).generate()
-                'email': 'admin@gmail.com',
-            }
-        }
-    },
-    'cookie': {
-        'expiry_days': 30,
-        'key': 'some_signature_key',
-        'name': 'some_cookie_name',
-    },
-    'preauthorized': {
-        'emails': ['muegge@gmail.com']
-    }
-}
+# ==============================================================================
+# 1. CONFIGURACIÓN Y AUTENTICACIÓN
+# ==============================================================================
 
-# Si tuvieras un archivo yaml:
-# with open('config.yaml') as file:
-#     config = yaml.load(file, Loader=SafeLoader)
+# Se recomienda mantener el archivo config.yaml en la raíz del proyecto
+try:
+    with open('config.yaml') as file:
+        config = yaml.load(file, Loader=SafeLoader)
+except FileNotFoundError:
+    st.error("Archivo de configuración 'config.yaml' no encontrado. Asegúrate de crearlo.")
+    st.stop()
 
+
+# ⬇️ ESTE ES EL CAMBIO CLAVE ⬇️
+# La nueva sintaxis de stauth.Authenticate solo acepta 'credentials' y 'cookie'
 authenticator = stauth.Authenticate(
-    config_data['credentials'],
-    config_data['cookie']['name'],
-    config_data['cookie']['key'],
-    config_data['cookie']['expiry_days'],
-    config_data['preauthorized']
+    config['credentials'], # Primer parámetro: credenciales
+    config['cookie']      # Segundo parámetro: configuración de cookies
 )
+# ⬆️ FIN DEL CAMBIO ⬆️
 
+# 2. Pantalla de Login
 name, authentication_status, username = authenticator.login('Login', 'main')
 
 if authentication_status is False:
